@@ -1,8 +1,9 @@
-import { useAppContext } from '../../context/AppContext';
+import { memo } from 'react';
+import { usePreferencesContext } from '../../context/PreferencesContext';
 import { RenderCounter } from '../RenderCounter';
 
-export const FontSizeControl = () => {
-  const { preferences, updateFontSize } = useAppContext();
+const FontSizeControl = () => {
+  const { preferences, updateFontSize } = usePreferencesContext();
 
   const buttonStyle = {
     padding: '5px 10px',
@@ -42,4 +43,6 @@ export const FontSizeControl = () => {
       </div>
     </div>
   );
-}; 
+};
+
+export default memo(FontSizeControl); 

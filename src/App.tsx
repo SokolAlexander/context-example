@@ -1,10 +1,12 @@
-import { AppProvider, useAppContext } from './context/AppContext';
-import { TodoSection } from './components/TodoSection';
-import { PreferencesSection } from './components/PreferencesSection';
+import { memo } from 'react';
+import { TodoProvider } from './context/TodoContext';
+import { PreferencesProvider, usePreferencesContext } from './context/PreferencesContext';
+import TodoSection from './components/TodoSection';
+import PreferencesSection from './components/PreferencesSection';
 import { RenderCounter } from './components/RenderCounter';
 
-const AppContent = () => {
-  const { preferences } = useAppContext();
+const AppContent = memo(() => {
+  const { preferences } = usePreferencesContext();
   
   const themeStyles = {
     backgroundColor: preferences.theme === 'dark' ? '#1a1a1a' : '#ffffff',
@@ -17,10 +19,10 @@ const AppContent = () => {
   return (
     <div style={{ position: 'relative', padding: '20px', ...themeStyles }}>
       <RenderCounter componentName="App" />
-      <h1>Context Re-rendering Demo</h1>
+      <h1>Context Re-rendering Demo (Optimized)</h1>
       <p style={{ color: preferences.theme === 'dark' ? '#aaa' : '#666', marginBottom: '20px' }}>
-        Notice how updating state in one section causes re-renders in unrelated components
-        due to the shared context. Watch the render counters in the top-right of each component.
+        Now each section uses its own context, so changes in one section won't cause
+        re-renders in the other section. Watch the render counters to see the difference!
       </p>
       
       <div style={{ display: 'flex', gap: '20px' }}>
@@ -29,13 +31,17 @@ const AppContent = () => {
       </div>
     </div>
   );
-};
+});
+
+AppContent.displayName = 'AppContent';
 
 function App() {
   return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
+    <PreferencesProvider>
+      <TodoProvider>
+        <AppContent />
+      </TodoProvider>
+    </PreferencesProvider>
   );
 }
 

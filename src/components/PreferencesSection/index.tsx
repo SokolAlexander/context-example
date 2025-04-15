@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { RenderCounter } from '../RenderCounter';
-import { ThemeToggle } from './ThemeToggle';
-import { FontSizeControl } from './FontSizeControl';
-import { useAppContext } from '../../context/AppContext';
+import ThemeToggle from './ThemeToggle';
+import FontSizeControl from './FontSizeControl';
+import { usePreferencesContext } from '../../context/PreferencesContext';
 
-export const PreferencesSection = () => {
-  const { preferences } = useAppContext();
+const PreferencesSection = () => {
+  const { preferences } = usePreferencesContext();
   
   const borderColor = preferences.theme === 'dark' ? '#1e7e34' : '#28a745';
   
@@ -25,4 +26,6 @@ export const PreferencesSection = () => {
       <FontSizeControl />
     </div>
   );
-}; 
+};
+
+export default memo(PreferencesSection); 

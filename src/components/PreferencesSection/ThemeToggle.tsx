@@ -1,8 +1,9 @@
-import { useAppContext } from '../../context/AppContext';
+import { memo } from 'react';
+import { usePreferencesContext } from '../../context/PreferencesContext';
 import { RenderCounter } from '../RenderCounter';
 
-export const ThemeToggle = () => {
-  const { preferences, updateTheme } = useAppContext();
+const ThemeToggle = () => {
+  const { preferences, updateTheme } = usePreferencesContext();
 
   return (
     <div style={{ 
@@ -31,4 +32,6 @@ export const ThemeToggle = () => {
       <p>Current theme: {preferences.theme}</p>
     </div>
   );
-}; 
+};
+
+export default memo(ThemeToggle); 
