@@ -1,0 +1,43 @@
+.pizzaPreview {
+  /* Base styles inherited from .component */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.previewCircle {
+  border: 2px solid #8B4513; /* Brown border for crust */
+  border-radius: 50%;
+  padding: 30px;
+  margin: 20px auto;
+  text-align: center;
+  position: relative;
+  font-size: 0.9em;
+  /* Size, background, border-width applied via inline styles */
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-width 0.3s ease;
+}
+
+.previewText {
+  margin: 0;
+  font-weight: bold;
+  color: #5C4033; /* Fixed dark brown color */
+}
+
+.toppingsText {
+  margin: 5px 0 0 0; /* Add some top margin */
+  font-size: 0.8em;
+  max-height: 60px;
+  overflow-y: auto;
+  /* Improve scrollbar appearance (optional, browser-specific) */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
+  color: #5C4033; /* Fixed dark brown color */
+}
+
+.priceDisplay {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.2em;
+} 

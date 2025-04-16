@@ -1,16 +1,17 @@
 import React from 'react';
 import { useStudioContext } from '../context/StudioContext';
 import RenderCounter from './RenderCounter';
+import styles from './CustomerDetails.module.css'; // Import CSS Module
 
 const CustomerDetails: React.FC = () => {
   // Uses theme, customerName, deliveryAddress setters
   const { theme, setTheme, customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = useStudioContext();
 
   return (
-    <div className="component customer-details" style={{ position: 'relative' }}>
+    <div className={`component ${styles.customerDetails}`} style={{ position: 'relative' }}>
       <RenderCounter componentName="CustomerDetails" />
       <h4>Customer Details</h4>
-      <div>
+      <div className={styles.detailGroup}>
         <label htmlFor="customerName">Name:</label>
         <input
           type="text"
@@ -19,7 +20,7 @@ const CustomerDetails: React.FC = () => {
           onChange={(e) => setCustomerName(e.target.value)}
         />
       </div>
-      <div>
+      <div className={styles.detailGroup}>
         <label htmlFor="deliveryAddress">Delivery Address:</label>
         <input
           type="text"
@@ -29,7 +30,7 @@ const CustomerDetails: React.FC = () => {
           placeholder="Enter delivery address"
         />
       </div>
-      <div>
+      <div className={styles.detailGroup}>
         <label htmlFor="theme">Theme:</label>
         <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}>
           <option value="light">Light</option>

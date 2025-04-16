@@ -1,0 +1,29 @@
+.orderSummary {
+  font-size: 0.95em;
+}
+
+.summaryItem {
+  margin-bottom: 0.5rem;
+}
+
+.summaryItem strong {
+  margin-right: 5px;
+}
+
+.summaryItem em {
+  opacity: 0.8;
+}
+
+.totalPrice {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.orderActions {
+  margin-top: 1rem;
+}
+
+.orderPlacedText {
+  font-style: italic;
+  opacity: 0.9;
+} 

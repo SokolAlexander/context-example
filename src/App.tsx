@@ -5,9 +5,15 @@ import OrderSummary from './components/OrderSummary'
 import CustomerDetails from './components/CustomerDetails'
 import PizzaPreview from './components/PizzaPreview'
 import RenderCounter from './components/RenderCounter'
+import { useEffect } from 'react'
 
 function App() {
   const { theme } = useStudioContext();
+
+  useEffect(() => {
+    document.body.classList.remove('light-theme', 'dark-theme');
+    document.body.classList.add(`${theme}-theme`);
+  }, [theme]);
 
   return (
     <div className={`App ${theme}`} style={{ position: 'relative' }}>

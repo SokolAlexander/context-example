@@ -1,0 +1,18 @@
+.customerDetails {
+}
+
+.detailGroup {
+  margin-bottom: 1rem;
+}
+
+.detailGroup label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 500;
+}
+
+.detailGroup input,
+.detailGroup select {
+  width: calc(100% - 1.6em);
+  box-sizing: border-box;
+} 

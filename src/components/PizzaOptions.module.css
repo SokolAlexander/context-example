@@ -1,0 +1,48 @@
+.pizzaOptions {
+}
+
+.optionsContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.optionGroup {
+  margin-bottom: 10px;
+}
+
+.optionGroup label {
+  margin-right: 8px;
+}
+
+.toppingsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.toppingLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.toppingCheckbox {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.sizeInput {
+  vertical-align: middle;
+  width: 100px;
+}
+
+.sizeDisplay {
+  min-width: 35px;
+  text-align: right;
+  display: inline-block;
+  margin-left: 5px;
+} 

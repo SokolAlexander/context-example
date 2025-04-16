@@ -7,5 +7,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <StudioProvider>
         <App />
     </StudioProvider>
-
 )
