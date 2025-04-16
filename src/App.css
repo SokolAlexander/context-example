@@ -1,42 +1,287 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Light Theme */
+  --bg-light: #ffffff;
+  --text-light: #212529;
+  --border-light: #dee2e6;
+  --panel-bg-light: #f8f9fa;
+  --input-bg-light: #ffffff;
+  --button-bg-light: #e9ecef;
+  --button-hover-bg-light: #ced4da;
+  --button-border-light: #adb5bd;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+
+  /* Dark Theme */
+  --bg-dark: #212529;
+  --text-dark: #e9ecef;
+  --border-dark: #495057;
+  --panel-bg-dark: #343a40;
+  --input-bg-dark: #495057;
+  --button-bg-dark: #495057;
+  --button-hover-bg-dark: #6c757d;
+  --button-border-dark: #6c757d;
+  --shadow-dark: rgba(255, 255, 255, 0.1);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+#root {
+  max-width: 1280px;
+  margin: 2rem auto;
+  padding: 0; /* Remove padding from root, apply to App */
+  width: 90%;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.App {
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.App h1 {
+  padding: 1.5rem 2rem;
+  margin: 0;
+  font-size: 1.8em; /* Slightly smaller H1 */
+  text-align: left;
+  border-bottom: 1px solid;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.App.light {
+  background-color: var(--panel-bg-light); /* Use panel bg for main app area */
+  color: var(--text-light);
+  box-shadow: 0 4px 12px var(--shadow-light);
+}
+.App.light h1 {
+  background-color: var(--bg-light);
+  border-color: var(--border-light);
+}
+
+.App.dark {
+  background-color: var(--panel-bg-dark);
+  color: var(--text-dark);
+  box-shadow: 0 4px 12px var(--shadow-dark);
+}
+.App.dark h1 {
+  background-color: var(--bg-dark);
+  border-color: var(--border-dark);
+}
+
+.layout {
+  display: flex;
+  flex-grow: 1;
+  padding: 1.5rem; /* Add padding around main layout */
+  gap: 1.5rem;
+}
+
+.main-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* General Component Styling */
+.component {
+  padding: 1rem 1.5rem;
+  border: 1px solid;
+  border-radius: 8px;
+  text-align: left;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.component h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.1em;
+  border-bottom: 1px dashed;
+  padding-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.App.light .component {
+  border-color: var(--border-light);
+  background-color: var(--bg-light);
+  box-shadow: 0 2px 4px var(--shadow-light);
+}
+.App.light .component h4 {
+  border-color: var(--border-light);
+}
+
+.App.dark .component {
+  border-color: var(--border-dark);
+  background-color: var(--bg-dark);
+  box-shadow: 0 2px 4px var(--shadow-dark);
+}
+.App.dark .component h4 {
+  border-color: var(--border-dark);
+}
+
+/* Input and Button Styling */
+button, input, select {
+  font-family: inherit;
+  font-size: 0.95em;
+  padding: 0.5em 0.8em;
+  margin: 0.3em;
+  border-radius: 6px;
+  border: 1px solid;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+button {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+label {
+  margin-right: 0.5em;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+input[type="color"] {
+  padding: 0.2em;
+  height: 2.2em; /* Match height roughly */
+  vertical-align: middle;
+}
+
+.color-preview {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  border: 1px solid;
+  vertical-align: middle;
+  margin-left: 0.5em;
+  border-radius: 4px;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+}
+
+/* Theme-specific Inputs/Buttons */
+.App.light button, .App.light input, .App.light select {
+  border-color: var(--border-light);
+  background-color: var(--input-bg-light);
+  color: var(--text-light);
+}
+.App.light button {
+  background-color: var(--button-bg-light);
+}
+.App.light button:hover {
+  background-color: var(--button-hover-bg-light);
+  border-color: var(--button-border-light);
+}
+.App.light input:focus, .App.light select:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+.App.light .color-preview {
+  border-color: var(--border-light);
+}
+
+.App.dark button, .App.dark input, .App.dark select {
+  border-color: var(--border-dark);
+  background-color: var(--input-bg-dark);
+  color: var(--text-dark);
+}
+.App.dark button {
+  background-color: var(--button-bg-dark);
+}
+.App.dark button:hover {
+  background-color: var(--button-hover-bg-dark);
+  border-color: var(--button-border-dark);
+}
+.App.dark input:focus, .App.dark select:focus {
+  outline: none;
+  border-color: #adb5bd;
+  box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);
+}
+.App.dark .color-preview {
+  border-color: var(--border-dark);
+}
+
+/* Specific Component Styles */
+.settings-panel {
+  flex-basis: 300px; /* Give settings panel a fixed basis */
+  flex-shrink: 0;
+}
+
+.settings-panel > div {
+  margin-bottom: 1rem;
+}
+
+.toolbar > div,
+.status-bar > div {
+  margin-top: 0.8rem;
+}
+
+.status-bar {
+ font-size: 0.9em;
+ opacity: 0.9;
+}
+
+.status-bar span {
+    margin: 0 0.5em;
+}
+
+.canvas-display {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px; /* Give canvas some minimum size */
+    position: relative; /* For positioning brush preview */
+    overflow: hidden;
+}
+
+.canvas-display p {
+    margin: 0.5em 0;
+    font-size: 0.9em;
+    background: rgba(128, 128, 128, 0.1);
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    z-index: 1; /* Ensure text is above brush preview */
+}
+
+.brush-preview {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px dashed rgba(128, 128, 128, 0.5);
+    opacity: 0.7;
+    pointer-events: none; /* Don't interfere with text selection */
+}
+
+/* Remove leftover default styles */
+.logo,
+.logo.react,
+.card,
+.read-the-docs {
+    display: none;
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+    /* This keyframe rule is unused, but removing the name itself might cause issues if referenced elsewhere unexpectedly.
+       We can just leave the definition empty or keep it as display: none; inside if needed, but hiding the elements that use it is sufficient. */
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
