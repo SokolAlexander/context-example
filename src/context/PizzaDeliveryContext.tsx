@@ -1,25 +1,12 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { createContext, useState, useContext, ReactNode, useMemo, useCallback } from 'react';
+import { useUserContext } from './UserContext'; // Import User context hook
 
-const TOPPINGS_LIST = [
-  "Pepperoni",
-  "Mushrooms",
-  "Onions",
-  "Sausage",
-  "Bacon",
-  "Olives",
-  "Peppers",
-  "Pineapple",
-];
-const CRUST_TYPES = ["Regular", "Thin", "Stuffed", "Cauliflower"];
-const SIZES = ["Small", "Medium", "Large", "X-Large"];
+// Constants
+export const TOPPINGS_LIST = ['Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 'Bacon', 'Olives', 'Peppers', 'Pineapple'];
+export const CRUST_TYPES = ['Regular', 'Thin', 'Stuffed', 'Cauliflower'];
+export const SIZES = ['Small', 'Medium', 'Large', 'X-Large'];
 
+// Pricing
 const BASE_PRICE: Record<string, number> = {
   Small: 8,
   Medium: 10,
@@ -35,49 +22,40 @@ const CRUST_PRICE: Record<string, number> = {
 };
 const ADDRESS_COMPLEXITY_FACTOR = 0.05;
 
-type Crust = (typeof CRUST_TYPES)[number];
-type Size = (typeof SIZES)[number];
-type Topping = (typeof TOPPINGS_LIST)[number];
+// --- Types ---
+type Crust = typeof CRUST_TYPES[number];
+type Size = typeof SIZES[number];
+type Topping = typeof TOPPINGS_LIST[number];
 
+// Interface - deliveryAddress and setter removed
 interface PizzaDeliveryContextState {
-  customerName: string;
   crust: Crust;
   size: Size;
   toppings: Topping[];
-  deliveryAddress: string;
   totalPrice: number;
-  setCustomerName: (name: string) => void;
   setCrust: (crust: Crust) => void;
   setSize: (size: Size) => void;
   toggleTopping: (topping: Topping) => void;
-  setDeliveryAddress: (address: string) => void;
 }
 
-const PizzaDeliveryContext = createContext<
-  PizzaDeliveryContextState | undefined
->(undefined);
+// Context Definition
+const PizzaDeliveryContext = createContext<PizzaDeliveryContextState | undefined>(undefined);
 
+// Provider Component
 interface PizzaDeliveryProviderProps {
   children: ReactNode;
 }
 
-export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
-  children,
-}) => {
-  const [customerName, setCustomerNameState] = useState<string>("Pizza Lover");
+export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({ children }) => {
+  // Pizza Config State
   const [crust, setCrustState] = useState<Crust>(CRUST_TYPES[0]);
   const [size, setSizeState] = useState<Size>(SIZES[1]);
   const [toppings, setToppingsState] = useState<Topping[]>([TOPPINGS_LIST[0]]);
-  const [deliveryAddress, setDeliveryAddressState] = useState<string>("");
+  // *** Consume UserContext to get deliveryAddress for price calc ***
+  const { deliveryAddress } = useUserContext();
 
-  const setCustomerName = useCallback(
-    (name: string) => setCustomerNameState(name),
-    []
-  );
-  const setCrust = useCallback(
-    (newCrust: Crust) => setCrustState(newCrust),
-    []
-  );
+  // Actions
+  const setCrust = useCallback((newCrust: Crust) => setCrustState(newCrust), []);
   const setSize = useCallback((newSize: Size) => setSizeState(newSize), []);
   const toggleTopping = useCallback((topping: Topping) => {
     setToppingsState((prev) =>
@@ -86,32 +64,31 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
         : [...prev, topping]
     );
   }, []);
-  const setDeliveryAddress = useCallback(
-    (address: string) => setDeliveryAddressState(address),
-    []
-  );
+  // setDeliveryAddress action removed
 
+  // Calculate Price internally - depends on deliveryAddress from UserContext
   const totalPrice = useMemo(() => {
     let price = BASE_PRICE[size] || 10;
     price += CRUST_PRICE[crust] || 0;
     price += toppings.length * PRICE_PER_TOPPING;
+    // Use deliveryAddress from UserContext
     price += deliveryAddress.length * ADDRESS_COMPLEXITY_FACTOR;
     return parseFloat(price.toFixed(2));
-  }, [size, crust, toppings, deliveryAddress]);
+  }, [size, crust, toppings, deliveryAddress]); // deliveryAddress is now from consumed context
 
-  const contextValue: PizzaDeliveryContextState = {
-    customerName,
+  // Context value memoized - deliveryAddress/setter removed
+  const contextValue = useMemo(() => ({
     crust,
     size,
     toppings,
-    deliveryAddress,
     totalPrice,
-    setCustomerName,
     setCrust,
     setSize,
     toggleTopping,
-    setDeliveryAddress,
-  };
+  }), [
+    crust, size, toppings, totalPrice, // Removed deliveryAddress from direct state deps
+    setCrust, setSize, toggleTopping // Removed setDeliveryAddress
+   ]);
 
   return (
     <PizzaDeliveryContext.Provider value={contextValue}>
@@ -120,14 +97,11 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
   );
 };
 
+// Hook
 export const usePizzaDeliveryContext = () => {
   const context = useContext(PizzaDeliveryContext);
   if (context === undefined) {
-    throw new Error(
-      "usePizzaDeliveryContext must be used within a PizzaDeliveryProvider"
-    );
+    throw new Error('usePizzaDeliveryContext must be used within a PizzaDeliveryProvider');
   }
   return context;
-};
-
-export { TOPPINGS_LIST, CRUST_TYPES, SIZES };
+}; 
