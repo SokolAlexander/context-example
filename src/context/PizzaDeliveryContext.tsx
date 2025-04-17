@@ -45,14 +45,12 @@ interface PizzaDeliveryContextState {
   size: Size;
   toppings: Topping[];
   deliveryAddress: string;
-  orderTime: Date | null;
   totalPrice: number;
   setCustomerName: (name: string) => void;
   setCrust: (crust: Crust) => void;
   setSize: (size: Size) => void;
   toggleTopping: (topping: Topping) => void;
   setDeliveryAddress: (address: string) => void;
-  placeOrder: () => void;
 }
 
 const PizzaDeliveryContext = createContext<
@@ -71,7 +69,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
   const [size, setSizeState] = useState<Size>(SIZES[1]);
   const [toppings, setToppingsState] = useState<Topping[]>([TOPPINGS_LIST[0]]);
   const [deliveryAddress, setDeliveryAddressState] = useState<string>("");
-  const [orderTime, setOrderTimeState] = useState<Date | null>(null);
 
   const setCustomerName = useCallback(
     (name: string) => setCustomerNameState(name),
@@ -93,7 +90,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
     (address: string) => setDeliveryAddressState(address),
     []
   );
-  const placeOrder = useCallback(() => setOrderTimeState(new Date()), []);
 
   const totalPrice = useMemo(() => {
     let price = BASE_PRICE[size] || 10;
@@ -109,14 +105,12 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
     size,
     toppings,
     deliveryAddress,
-    orderTime,
     totalPrice,
     setCustomerName,
     setCrust,
     setSize,
     toggleTopping,
     setDeliveryAddress,
-    placeOrder,
   };
 
   return (

@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
-import styles from './OrderSummary.module.css'; // Import CSS Module
+import styles from './OrderSummary.module.css';
 
 const OrderSummary: React.FC = () => {
-  const { customerName, totalPrice, orderTime, deliveryAddress, placeOrder } = usePizzaDeliveryContext();
+  const { customerName, totalPrice, deliveryAddress } = usePizzaDeliveryContext();
+
+  const [orderTime, setOrderTime] = useState<Date | null>(null);
+
+  const handlePlaceOrder = useCallback(() => {
+    if (!deliveryAddress) {
+      alert('Please enter a delivery address before placing the order.');
+      return;
+    }
+    setOrderTime(new Date());
+  }, [deliveryAddress]);
 
   return (
     <div className={`component ${styles.orderSummary}`} style={{ position: 'relative' }}>
@@ -19,7 +29,7 @@ const OrderSummary: React.FC = () => {
         {orderTime ? (
           <span className={styles.orderPlacedText}>Order Placed: {orderTime.toLocaleTimeString()}</span>
         ) : (
-          <button onClick={placeOrder} disabled={!deliveryAddress}>Place Order</button>
+          <button onClick={handlePlaceOrder} disabled={!deliveryAddress}>Place Order</button>
         )}
       </div>
     </div>
