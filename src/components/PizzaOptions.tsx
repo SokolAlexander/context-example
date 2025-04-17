@@ -7,41 +7,47 @@ const PizzaOptions: React.FC = () => {
   const { crust, setCrust, size, setSize, toppings, toggleTopping } = usePizzaDeliveryContext();
 
   return (
-    <div className={`component ${styles.pizzaOptions}`} style={{ position: 'relative' }}>
+    <div className={`component ${styles.pizzaOptions}`}>
       <RenderCounter componentName="PizzaOptions" />
-      <h4>Pizza Options</h4>
+      <h2>Pizza Options</h2>
 
-      <div className={styles.optionGroup}>
-        <label htmlFor="size">Size:</label>
-        <select id="size" value={size} onChange={(e) => setSize(e.target.value)}>
-          {SIZES.map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-      </div>
+      <div className={styles.optionsLayout}>
+        <div className={`component ${styles.optionCard}`}>
+          <RenderCounter componentName="Size" />
+          <h3>Size:</h3>
+          <select value={size} onChange={(e) => setSize(e.target.value)}>
+            {SIZES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
 
-      <div className={styles.optionGroup}>
-        <label htmlFor="crust">Crust:</label>
-        <select id="crust" value={crust} onChange={(e) => setCrust(e.target.value)}>
-          {CRUST_TYPES.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
+        <div className={`component ${styles.optionCard}`}>
+          <RenderCounter componentName="Crust" />
+          <h3>Crust:</h3>
+          <select value={crust} onChange={(e) => setCrust(e.target.value)}>
+            {CRUST_TYPES.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
 
-      <div className={styles.optionGroup}>
-        <label>Toppings:</label>
-        <div className={styles.toppingsContainer}>
-          {TOPPINGS_LIST.map(topping => (
-            <label key={topping} className={styles.toppingLabel}>
-              <input
-                type="checkbox"
-                checked={toppings.includes(topping)}
-                onChange={() => toggleTopping(topping)}
-                className={styles.toppingCheckbox}
-              />
-              {topping}
-            </label>
-          ))}
+        <div className={`component ${styles.optionCard}`}>
+          <RenderCounter componentName="Toppings" />
+          <h3>Toppings:</h3>
+          <div className={styles.toppingsGrid}>
+            {TOPPINGS_LIST.map(topping => (
+              <label key={topping} className={styles.toppingItem}>
+                <input
+                  type="checkbox"
+                  checked={toppings.includes(topping)}
+                  onChange={() => toggleTopping(topping)}
+                />
+                {topping}
+              </label>
+            ))}
+          </div>
+          <div className={styles.toppingsCount}>
+            {toppings.length} selected
+          </div>
         </div>
       </div>
-
     </div>
   );
 };
