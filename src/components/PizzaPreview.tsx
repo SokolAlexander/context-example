@@ -1,10 +1,10 @@
 import React from "react";
-import { useStudioContext } from "../context/StudioContext";
+import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaPreview.module.css"; // Import CSS Module
 
 const PizzaPreview: React.FC = () => {
-  const { size, crust, toppings, totalPrice } = useStudioContext();
+  const { size, crust, toppings, totalPrice } = usePizzaDeliveryContext();
 
   const toppingsList = toppings.join(", ") || "Plain";
 

@@ -1,5 +1,5 @@
 import './App.css'
-import { useStudioContext } from './context/StudioContext'
+import { usePizzaDeliveryContext } from './context/PizzaDeliveryContext.tsx'
 import PizzaOptions from './components/PizzaOptions'
 import OrderSummary from './components/OrderSummary'
 import CustomerDetails from './components/CustomerDetails'
@@ -8,7 +8,7 @@ import RenderCounter from './components/RenderCounter'
 import { useEffect } from 'react'
 
 function App() {
-  const { theme } = useStudioContext();
+  const { theme } = usePizzaDeliveryContext();
 
   useEffect(() => {
     document.body.classList.remove('light-theme', 'dark-theme');

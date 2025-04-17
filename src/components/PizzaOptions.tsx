@@ -1,10 +1,10 @@
 import React from 'react';
-import { useStudioContext, TOPPINGS_LIST, CRUST_TYPES, SIZES } from '../context/StudioContext';
+import { usePizzaDeliveryContext, TOPPINGS_LIST, CRUST_TYPES, SIZES } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
 import styles from './PizzaOptions.module.css';
 
 const PizzaOptions: React.FC = () => {
-  const { crust, setCrust, size, setSize, toppings, toggleTopping } = useStudioContext();
+  const { crust, setCrust, size, setSize, toppings, toggleTopping } = usePizzaDeliveryContext();
 
   return (
     <div className={`component ${styles.pizzaOptions}`} style={{ position: 'relative' }}>

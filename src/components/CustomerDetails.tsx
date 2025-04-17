@@ -1,11 +1,10 @@
 import React from 'react';
-import { useStudioContext } from '../context/StudioContext';
+import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
 import styles from './CustomerDetails.module.css'; // Import CSS Module
 
 const CustomerDetails: React.FC = () => {
-  // Uses theme, customerName, deliveryAddress setters
-  const { theme, setTheme, customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = useStudioContext();
+  const { theme, setTheme, customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = usePizzaDeliveryContext();
 
   return (
     <div className={`component ${styles.customerDetails}`} style={{ position: 'relative' }}>
@@ -37,8 +36,7 @@ const CustomerDetails: React.FC = () => {
           <option value="dark">Dark</option>
         </select>
       </div>
-        {/* Note: Changing address here will affect price in OrderSummary/PizzaPreview */}
-        {/* due to the price calculation logic in the context, demonstrating the entanglement */}
+      {/* Note about price entanglement removed as it's part of the exercise description elsewhere */}
     </div>
   );
 };

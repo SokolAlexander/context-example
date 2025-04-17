@@ -1,11 +1,10 @@
 import React from 'react';
-import { useStudioContext } from '../context/StudioContext';
+import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css'; // Import CSS Module
 
 const OrderSummary: React.FC = () => {
-  // Uses customerName, totalPrice, orderTime, deliveryAddress
-  const { customerName, totalPrice, orderTime, deliveryAddress, placeOrder } = useStudioContext();
+  const { customerName, totalPrice, orderTime, deliveryAddress, placeOrder } = usePizzaDeliveryContext();
 
   return (
     <div className={`component ${styles.orderSummary}`} style={{ position: 'relative' }}>
