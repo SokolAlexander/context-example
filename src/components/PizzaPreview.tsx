@@ -1,10 +1,12 @@
 import React from "react";
 import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
+import { usePizzaPrice } from "../hooks/usePizzaPrice";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaPreview.module.css";
 
 const PizzaPreview: React.FC = () => {
-  const { size, crust, toppings, totalPrice } = usePizzaDeliveryContext();
+  const { size, crust, toppings } = usePizzaDeliveryContext();
+  const totalPrice = usePizzaPrice();
 
   const toppingsList = toppings.join(", ") || "Plain";
 
