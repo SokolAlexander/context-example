@@ -1,10 +1,12 @@
 import React from 'react';
 import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
+import { useThemeContext } from '../context/ThemeContext.tsx';
 import RenderCounter from './RenderCounter';
-import styles from './CustomerDetails.module.css'; // Import CSS Module
+import styles from './CustomerDetails.module.css';
 
 const CustomerDetails: React.FC = () => {
-  const { theme, setTheme, customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = usePizzaDeliveryContext();
+  const { theme, setTheme } = useThemeContext();
+  const { customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = usePizzaDeliveryContext();
 
   return (
     <div className={`component ${styles.customerDetails}`} style={{ position: 'relative' }}>
@@ -36,7 +38,6 @@ const CustomerDetails: React.FC = () => {
           <option value="dark">Dark</option>
         </select>
       </div>
-      {/* Note about price entanglement removed as it's part of the exercise description elsewhere */}
     </div>
   );
 };

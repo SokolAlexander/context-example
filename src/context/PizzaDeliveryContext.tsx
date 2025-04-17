@@ -35,14 +35,12 @@ const CRUST_PRICE: Record<string, number> = {
 };
 const ADDRESS_COMPLEXITY_FACTOR = 0.05;
 
-type Theme = 'light' | 'dark';
 type Crust = (typeof CRUST_TYPES)[number];
 type Size = (typeof SIZES)[number];
 type Topping = (typeof TOPPINGS_LIST)[number];
 
 interface PizzaDeliveryContextState {
   customerName: string;
-  theme: Theme;
   crust: Crust;
   size: Size;
   toppings: Topping[];
@@ -50,7 +48,6 @@ interface PizzaDeliveryContextState {
   orderTime: Date | null;
   totalPrice: number;
   setCustomerName: (name: string) => void;
-  setTheme: (theme: Theme) => void;
   setCrust: (crust: Crust) => void;
   setSize: (size: Size) => void;
   toggleTopping: (topping: Topping) => void;
@@ -70,7 +67,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
   children,
 }) => {
   const [customerName, setCustomerNameState] = useState<string>("Pizza Lover");
-  const [theme, setThemeState] = useState<Theme>("light");
   const [crust, setCrustState] = useState<Crust>(CRUST_TYPES[0]);
   const [size, setSizeState] = useState<Size>(SIZES[1]);
   const [toppings, setToppingsState] = useState<Topping[]>([TOPPINGS_LIST[0]]);
@@ -81,7 +77,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
     (name: string) => setCustomerNameState(name),
     []
   );
-  const setTheme = useCallback((newTheme: Theme) => setThemeState(newTheme), []);
   const setCrust = useCallback(
     (newCrust: Crust) => setCrustState(newCrust),
     []
@@ -110,7 +105,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
 
   const contextValue: PizzaDeliveryContextState = {
     customerName,
-    theme,
     crust,
     size,
     toppings,
@@ -118,7 +112,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
     orderTime,
     totalPrice,
     setCustomerName,
-    setTheme,
     setCrust,
     setSize,
     toggleTopping,

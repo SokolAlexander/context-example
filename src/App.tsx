@@ -1,14 +1,14 @@
 import './App.css'
-import { usePizzaDeliveryContext } from './context/PizzaDeliveryContext.tsx'
 import PizzaOptions from './components/PizzaOptions'
 import OrderSummary from './components/OrderSummary'
 import CustomerDetails from './components/CustomerDetails'
 import PizzaPreview from './components/PizzaPreview'
 import RenderCounter from './components/RenderCounter'
 import { useEffect } from 'react'
+import { useThemeContext } from './context/ThemeContext'
 
 function App() {
-  const { theme } = usePizzaDeliveryContext();
+  const { theme } = useThemeContext();
 
   useEffect(() => {
     document.body.classList.remove('light-theme', 'dark-theme');
