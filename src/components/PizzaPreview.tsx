@@ -1,10 +1,20 @@
 import React from "react";
-import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
+import { 
+  useSize, 
+  useCrust, 
+  useToppings
+} from "../context/PizzaDeliveryContext";
+import { useTotalPrice } from "../hooks/useTotalPrice";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaPreview.module.css";
 
 const PizzaPreview: React.FC = () => {
-  const { size, crust, toppings, totalPrice } = usePizzaDeliveryContext();
+  // Use individual selector hooks for more granular rendering control
+  const size = useSize();
+  const crust = useCrust();
+  const toppings = useToppings();
+  // Use our new useTotalPrice hook
+  const totalPrice = useTotalPrice();
 
   const toppingsList = toppings.join(", ") || "Plain";
 

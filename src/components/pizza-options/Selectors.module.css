@@ -1,0 +1,84 @@
+.selectorContainer {
+  margin-bottom: 16px;
+  position: relative;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color, #ccc);
+  display: flex;
+  flex-direction: column;
+  min-height: 90px; /* Ensure consistent height for horizontal alignment */
+}
+
+.selectorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  min-height: 24px; /* Ensure consistent height for the headers */
+}
+
+.selectorLabel {
+  font-weight: bold;
+  color: var(--text-color, inherit);
+  margin: 0;
+}
+
+.selector {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color, #ccc);
+  background-color: var(--input-bg, #fff);
+  color: var(--text-color, inherit);
+  height: 38px; /* Ensure consistent height for selects */
+  appearance: auto; /* Native appearance works better with system dark mode */
+}
+
+/* Style for dark theme specifically */
+:global(.dark-theme) .selector {
+  background-color: rgba(30, 30, 30, 0.8);
+  border-color: rgba(100, 100, 100, 0.5);
+}
+
+:global(.dark-theme) .selectorContainer,
+:global(.dark-theme) .toppingsContainer {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-color: rgba(100, 100, 100, 0.5);
+}
+
+.toppingsContainer {
+  margin-bottom: 16px;
+  position: relative;
+  padding: 10px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color, #ccc);
+}
+
+.toppingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.toppingLabel {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-color, inherit);
+}
+
+.toppingCheckbox {
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.toppingsCount {
+  font-size: 0.8rem;
+  color: var(--text-muted, #999);
+  font-style: italic;
+} 

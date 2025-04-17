@@ -1,10 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useMemo, useCallback } from 'react';
-import { useUserContext } from './UserContext'; // Import User context hook
+import React, { createContext, useContext, useRef, useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useUserContext } from './UserContext';
 
 // Constants
 export const TOPPINGS_LIST = ['Pepperoni', 'Mushrooms', 'Onions', 'Sausage', 'Bacon', 'Olives', 'Peppers', 'Pineapple'];
 export const CRUST_TYPES = ['Regular', 'Thin', 'Stuffed', 'Cauliflower'];
-export const SIZES = ['Small', 'Medium', 'Large', 'X-Large'];
+export const SIZES = ['Small', 'Medium', 'Large', 'XLarge'];
 
 // Pricing
 const BASE_PRICE: Record<string, number> = {
@@ -27,81 +27,154 @@ type Crust = typeof CRUST_TYPES[number];
 type Size = typeof SIZES[number];
 type Topping = typeof TOPPINGS_LIST[number];
 
-// Interface - deliveryAddress and setter removed
-interface PizzaDeliveryContextState {
+// Store State Type
+interface PizzaDeliveryState {
   crust: Crust;
   size: Size;
   toppings: Topping[];
-  totalPrice: number;
-  setCrust: (crust: Crust) => void;
-  setSize: (size: Size) => void;
-  toggleTopping: (topping: Topping) => void;
+}
+
+// Subscription Listener Type
+type Listener = () => void;
+
+// Store Manager Type
+interface PizzaDeliveryStore {
+  getState: () => PizzaDeliveryState;
+  setState: (updater: (state: PizzaDeliveryState) => PizzaDeliveryState) => void;
+  subscribe: (listener: Listener) => () => void;
 }
 
 // Context Definition
-const PizzaDeliveryContext = createContext<PizzaDeliveryContextState | undefined>(undefined);
+const PizzaDeliveryContext = createContext<PizzaDeliveryStore | null>(null);
 
-// Provider Component
+// Provider Component Props
 interface PizzaDeliveryProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({ children }) => {
-  // Pizza Config State
-  const [crust, setCrustState] = useState<Crust>(CRUST_TYPES[0]);
-  const [size, setSizeState] = useState<Size>(SIZES[1]);
-  const [toppings, setToppingsState] = useState<Topping[]>([TOPPINGS_LIST[0]]);
-  // *** Consume UserContext to get deliveryAddress for price calc ***
+  // Get delivery address from UserContext for price calculation
   const { deliveryAddress } = useUserContext();
+  
+  // Create a ref to hold state and listeners
+  const storeRef = useRef<{
+    state: PizzaDeliveryState;
+    listeners: Set<Listener>;
+  }>({
+    state: {
+      crust: CRUST_TYPES[0],
+      size: SIZES[1],
+      toppings: [TOPPINGS_LIST[0]],
+    },
+    listeners: new Set()
+  });
 
-  // Actions
-  const setCrust = useCallback((newCrust: Crust) => setCrustState(newCrust), []);
-  const setSize = useCallback((newSize: Size) => setSizeState(newSize), []);
-  const toggleTopping = useCallback((topping: Topping) => {
-    setToppingsState((prev) =>
-      prev.includes(topping)
-        ? prev.filter((t) => t !== topping)
-        : [...prev, topping]
-    );
+  // Function to get current state
+  const getState = useCallback((): PizzaDeliveryState => {
+    return storeRef.current.state;
   }, []);
-  // setDeliveryAddress action removed
 
-  // Calculate Price internally - depends on deliveryAddress from UserContext
-  const totalPrice = useMemo(() => {
-    let price = BASE_PRICE[size] || 10;
-    price += CRUST_PRICE[crust] || 0;
-    price += toppings.length * PRICE_PER_TOPPING;
-    // Use deliveryAddress from UserContext
-    price += deliveryAddress.length * ADDRESS_COMPLEXITY_FACTOR;
-    return parseFloat(price.toFixed(2));
-  }, [size, crust, toppings, deliveryAddress]); // deliveryAddress is now from consumed context
+  // Function to update state
+  const setState = useCallback((updater: (state: PizzaDeliveryState) => PizzaDeliveryState) => {
+    // Update state immutably
+    storeRef.current.state = updater(storeRef.current.state);
+    
+    // Notify all listeners
+    storeRef.current.listeners.forEach(listener => listener());
+  }, []);
 
-  // Context value memoized - deliveryAddress/setter removed
-  const contextValue = useMemo(() => ({
-    crust,
-    size,
-    toppings,
-    totalPrice,
-    setCrust,
-    setSize,
-    toggleTopping,
-  }), [
-    crust, size, toppings, totalPrice, // Removed deliveryAddress from direct state deps
-    setCrust, setSize, toggleTopping // Removed setDeliveryAddress
-   ]);
+  // Function to subscribe to state changes
+  const subscribe = useCallback((listener: Listener) => {
+    const { listeners } = storeRef.current;
+    listeners.add(listener);
+    
+    // Return unsubscribe function
+    return () => {
+      listeners.delete(listener);
+    };
+  }, []);
 
+  // Create the store object
+  const store: PizzaDeliveryStore = {
+    getState,
+    setState,
+    subscribe
+  };
+
+  // Removed useEffect for price calculation since it's now handled by useTotalPrice hook
+
+  // Return the provider
   return (
-    <PizzaDeliveryContext.Provider value={contextValue}>
+    <PizzaDeliveryContext.Provider value={store}>
       {children}
     </PizzaDeliveryContext.Provider>
   );
 };
 
-// Hook
-export const usePizzaDeliveryContext = () => {
-  const context = useContext(PizzaDeliveryContext);
-  if (context === undefined) {
-    throw new Error('usePizzaDeliveryContext must be used within a PizzaDeliveryProvider');
+// Custom hook to use the store
+export const usePizzaDeliveryStore = (): PizzaDeliveryStore => {
+  const store = useContext(PizzaDeliveryContext);
+  if (!store) {
+    throw new Error('usePizzaDeliveryStore must be used within a PizzaDeliveryProvider');
   }
-  return context;
+  return store;
+};
+
+// Custom selector hook that subscribes to specific state changes
+export function usePizzaDeliverySelector<Selected>(
+  selector: (state: PizzaDeliveryState) => Selected
+): Selected {
+  const store = usePizzaDeliveryStore();
+  
+  // Use React 18's useSyncExternalStore for subscribing to external store
+  return React.useSyncExternalStore(
+    store.subscribe,
+    () => selector(store.getState()),
+    () => selector(store.getState())
+  );
+}
+
+// Convenience hooks for common state selections
+export const useCrust = () => usePizzaDeliverySelector(state => state.crust);
+export const useSize = () => usePizzaDeliverySelector(state => state.size);
+export const useToppings = () => usePizzaDeliverySelector(state => state.toppings);
+
+// Action hooks
+export const useSetCrust = () => {
+  const store = usePizzaDeliveryStore();
+  
+  return useCallback((newCrust: Crust) => {
+    store.setState(state => ({
+      ...state,
+      crust: newCrust
+    }));
+  }, [store]);
+};
+
+export const useSetSize = () => {
+  const store = usePizzaDeliveryStore();
+  
+  return useCallback((newSize: Size) => {
+    store.setState(state => ({
+      ...state,
+      size: newSize
+    }));
+  }, [store]);
+};
+
+export const useToggleTopping = () => {
+  const store = usePizzaDeliveryStore();
+  
+  return useCallback((topping: Topping) => {
+    store.setState(state => {
+      const toppings = state.toppings.includes(topping)
+        ? state.toppings.filter(t => t !== topping)
+        : [...state.toppings, topping];
+      
+      return {
+        ...state,
+        toppings
+      };
+    });
+  }, [store]);
 }; 

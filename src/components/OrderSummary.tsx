@@ -1,12 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
-import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
+import { useTotalPrice } from '../hooks/useTotalPrice';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary: React.FC = () => {
   const { customerName, deliveryAddress } = useUserContext();
-  const { totalPrice } = usePizzaDeliveryContext();
+  const totalPrice = useTotalPrice();
 
   const [orderTime, setOrderTime] = useState<Date | null>(null);
 

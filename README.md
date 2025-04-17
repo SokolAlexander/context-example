@@ -1,53 +1,130 @@
-# React Context Performance Exercise: Pizza Builder
+# Pizza Builder with Optimized Context
 
-This project is designed as an exercise to understand and address performance issues caused by overloaded React Contexts, using a Pizza Builder application theme.
+This project demonstrates how to implement a subscription-based React context with specialized hooks that prevent unnecessary re-renders when using context values.
 
 ## The Problem
 
-The application simulates a simple Pizza Builder interface. It uses a single React Context (`PizzaBuilderContext` - although the file might still be named `StudioContext.tsx` initially) to manage all application state, including:
+In a standard React Context implementation, any component that consumes a context using `useContext` will re-render whenever any value in that context changes, even if the component only uses a subset of the context values.
 
-*   **User Info:** Customer Name, UI Theme (light/dark)
-*   **Pizza Configuration:** Crust Type, Pizza Size, Selected Toppings
-*   **Order Details:** Delivery Address, Order Timestamp, Calculated Total Price
+For example, the `OrderSummary` component only needs the `totalPrice` from the `PizzaDeliveryContext`, but it would re-render when the pizza size, crust, or toppings change, even if the price remains the same.
 
-Placing all this related and unrelated state into one context means that **any** change to **any** part of the context value (e.g., selecting a topping, changing the theme, typing an address) will cause **all** components consuming that context to re-render. This happens even if the component doesn't directly use the specific piece of state that changed (e.g., `PizzaOptions` re-rendering when the theme changes, or `CustomerDetails` re-rendering when a topping is added).
+## The Solution
 
-The calculated `totalPrice` also introduces coupling - changing the `deliveryAddress` or `toppings` affects the price, which might cause components only interested in the price (like `OrderSummary` or `PizzaPreview`) to re-render, but also potentially others if they consume the whole context.
+We've implemented two complementary approaches:
 
-You can observe this by running the app (`npm run dev`), interacting with the controls (changing size, crust, toppings, theme, name, address), and watching the red Render Counter badges (`R: X`) in the top-right corner of each component block.
+1. A subscription-based context using React's useSyncExternalStore hook
+2. A specialized cross-context hook for calculating total price
 
-## Your Task
+### Subscription-Based Context
 
-Your goal is to refactor the application to improve performance by separating the concerns within the context.
+Our approach:
+- Uses a useRef to store an immutable state object and a listeners set
+- Provides a subscription mechanism that allows components to listen for specific state changes
+- Creates selector hooks that only trigger re-renders when the selected values change
 
-1.  **Analyze `src/context/StudioContext.tsx`:** Identify the distinct categories of state being managed.
-You should find at least three logical groups: User Info, Pizza Configuration, and Order/Price Details.
-2.  **Create Separate Contexts:** Create new context files (e.g., `UserInfoContext.tsx`, `PizzaConfigContext.tsx`, `OrderDetailsContext.tsx`) for each distinct domain.
-    *   Each new context should have its own state, types, provider component, and consumer hook (e.g., `useUserInfo`, `usePizzaConfig`).
-    *   Decide where the `totalPrice` calculation logic best fits. Should it be in `OrderDetailsContext`? Should it be calculated within components that need it? Does it warrant its own small context?
-3.  **Update the Main Provider:** Modify `src/context/StudioContext.tsx` (ideally rename it and its exports) or update `src/main.tsx`. The goal is to wrap the `App` component with the providers for *all* the new, separated contexts.
-4.  **Update Components:** Refactor the components (`App.tsx`, `PizzaOptions.tsx`, `OrderSummary.tsx`, `CustomerDetails.tsx`, `PizzaPreview.tsx`) to consume only the specific context(s) they need using the new hooks you created.
-5.  **Verify:** Run the application again. Interact with the controls and observe the Render Counters. Components should now only re-render (increment their counter) when the *relevant* data they subscribe to actually changes.
-    *   For example, changing the theme in `CustomerDetails` should ideally *only* re-render `CustomerDetails` and `App` (if `App` uses the theme), not `PizzaOptions` or `PizzaPreview`.
-    *   Adding a topping in `PizzaOptions` should ideally *only* re-render `PizzaOptions`, `PizzaPreview` (if it shows toppings/price), and `OrderSummary` (if it shows price), but not `CustomerDetails`.
+### Specialized useTotalPrice Hook
 
-**Bonus:** Can the price calculation be made more efficient or decoupled further? How would you handle dependencies between contexts if, for example, certain toppings were only available for certain sizes (though this isn't implemented here)?
+For the total price calculation (which depends on values from multiple contexts), we've created a specialized hook that:
+- Pulls data from both contexts (pizza configuration and user details)
+- Uses useMemo to recalculate only when dependencies change
+- Ensures components only re-render when the actual calculated price changes
 
-## Getting Started
+## Key Components
 
-1.  **Install Dependencies:**
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
-2.  **Run the Development Server:**
-    ```bash
-    npm run dev
-    # or
-    yarn dev
-    ```
-3.  Open your browser to the URL provided (usually `http://localhost:5173`).
-4.  Open the developer console to observe the *detailed* render logs from the `RenderCounter` component if needed.
-5.  Observe the red `R: X` badges in the UI and interact with the controls to see the re-renders.
-6.  Start refactoring!
+### PizzaDeliveryContext
+
+The context provides a store with these methods:
+- `getState()` - Returns the current state
+- `setState(updater)` - Updates the state immutably
+- `subscribe(listener)` - Registers a listener function that's called when state changes
+
+### usePizzaDeliverySelector
+
+This custom hook allows components to subscribe to specific slices of state:
+
+```typescript
+export function usePizzaDeliverySelector<Selected>(
+  selector: (state: PizzaDeliveryState) => Selected
+): Selected {
+  const store = usePizzaDeliveryStore();
+  
+  return useSyncExternalStore(
+    store.subscribe,
+    () => selector(store.getState()),
+    () => selector(store.getState())
+  );
+}
+```
+
+### useTotalPrice Hook
+
+Our specialized hook for calculating the total price:
+
+```typescript
+export const useTotalPrice = (): number => {
+  // Get pizza details from PizzaDeliveryContext
+  const size = useSize();
+  const crust = useCrust();
+  const toppings = useToppings();
+  
+  // Get delivery address from UserContext
+  const { deliveryAddress } = useUserContext();
+  
+  // Calculate total price based on all dependencies
+  return useMemo(() => {
+    let price = BASE_PRICE[size] || 10;
+    price += CRUST_PRICE[crust] || 0;
+    price += toppings.length * PRICE_PER_TOPPING;
+    price += (deliveryAddress?.length || 0) * ADDRESS_COMPLEXITY_FACTOR;
+    
+    return parseFloat(price.toFixed(2));
+  }, [size, crust, toppings, deliveryAddress]);
+};
+```
+
+### Specialized Selector Hooks
+
+For convenience, we've created specialized hooks for common state slices:
+- `useCrust()` - Only re-renders when the crust changes
+- `useSize()` - Only re-renders when the size changes
+- `useToppings()` - Only re-renders when the toppings change
+
+### Action Hooks
+
+We also provide hooks for state updates:
+- `useSetCrust()`
+- `useSetSize()`
+- `useToggleTopping()`
+
+## Demo Components
+
+The project includes a `ContextPerformanceDemo` component that demonstrates the benefits of our approach:
+
+- `StoreConsumer` - Uses the store directly and re-renders on any state change
+- `PriceSubscriber` - Only re-renders when the price inputs change
+- `SizeSubscriber` - Only re-renders when the size changes
+- `ToppingSubscriber` - Only re-renders when the toppings change
+
+## Running the Project
+
+1. Install dependencies:
+   ```
+   npm install
+   ```
+
+2. Start the development server:
+   ```
+   npm run dev
+   ```
+
+3. Open your browser to the provided URL (usually http://localhost:5173)
+
+4. Observe the render counts (red badges) as you interact with the UI
+
+## Benefits
+
+- **Performance Improvements**: Components only re-render when their specific dependencies change
+- **Decoupled Components**: Components can subscribe to just the data they need
+- **Cross-Context Calculations**: Specialized hooks can combine data from multiple contexts
+- **Fine-grained Updates**: State can be updated granularly without causing cascading re-renders
+- **Debugging**: Render counters help visualize which components are re-rendering and when
