@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
+import { useUserContext } from '../context/UserContext.tsx';
 import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary: React.FC = () => {
-  const { customerName, totalPrice, deliveryAddress } = usePizzaDeliveryContext();
+  const { customerName, deliveryAddress } = useUserContext();
+  const { totalPrice } = usePizzaDeliveryContext();
 
   const [orderTime, setOrderTime] = useState<Date | null>(null);
 
@@ -14,6 +16,7 @@ const OrderSummary: React.FC = () => {
       return;
     }
     setOrderTime(new Date());
+    console.log('Order placed! (Locally handled)');
   }, [deliveryAddress]);
 
   return (
