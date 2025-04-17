@@ -1,17 +1,12 @@
-import React from "react";
-import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
-import RenderCounter from "./RenderCounter";
-import styles from "./CustomerDetails.module.css";
+import React from 'react';
+import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
+import { useThemeContext } from '../context/ThemeContext.tsx';
+import RenderCounter from './RenderCounter';
+import styles from './CustomerDetails.module.css';
 
 const CustomerDetails: React.FC = () => {
-  const {
-    theme,
-    setTheme,
-    customerName,
-    setCustomerName,
-    deliveryAddress,
-    setDeliveryAddress,
-  } = usePizzaDeliveryContext();
+  const { theme, setTheme } = useThemeContext();
+  const { customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = usePizzaDeliveryContext();
 
   return (
     <div
