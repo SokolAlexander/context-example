@@ -118,6 +118,7 @@ Instead of using React's built-in state management, the solution implements a cu
 ### 2. Granular Selectors
 
 The most significant improvement is the use of selectors that allow components to subscribe only to specific pieces of state. This selective subscription is crucial because:
+
 - Components only re-render when their specific data changes
 - Even within a single context, components can subscribe to just what they need
 - It eliminates the common problem of "over-rendering" in context-based applications
@@ -127,10 +128,27 @@ The most significant improvement is the use of selectors that allow components t
 While the previous solution separated contexts, this advanced implementation:
 
 1. **Eliminates Unnecessary Renders**: Components only re-render when the exact piece of state they use changes
+
    - If you change the crust, only CrustSelector and components that display crust will re-render
    - If you change the toppings, SizeSelector and CrustSelector remain stable
 
 2. **Scales Better**: As your application grows, this pattern maintains performance by keeping renders targeted
 
-
 This implementation demonstrates how to solve the context performance problem not just through separation of concerns but through intelligent subscription patterns that minimize component re-renders.
+
+## Moving forward
+
+Now we have a sort of a own-implemented state management system, that still has some issues, at least:
+
+- Hard to debug and track changes
+- No built-in middleware or side effects handling
+- No built-in computed values etc.
+- No way to access the store outside of a react component
+
+Depending on how we want to solve this, we could either:
+A. ensure 1-way data flow, add reducer, support for middleware - this way redux-like state management is possible
+B. add reactivity to the store, use e.g. RxJS. Update state with actions, add computed values and move towards Mobx-like state management
+C. Get rid of the React context and store the state in a plain object. Still use selectors, but the state is not bound to react. Expose functions to get and set state - this is more zustand-like approach.
+D. Support splitting the state into multiple stores, decentralize the state management and allow atomic updates - this is more like a Jorai.
+
+Anyway, we're not gonna reimplement the state management system oursleves (that way madness lies). But now that we know a bit more about the approaches, we can make a more informed decision when choosing the most appropriate library for the job.
