@@ -24,7 +24,7 @@
   padding: 10px;
   border: 1px solid var(--border-color, #ccc);
   text-align: center;
-  min-height: 130px; /* Set a minimum height for consistent layout */
+  min-height: 130px;
   display: flex;
   flex-direction: column;
 }
@@ -46,7 +46,7 @@
   font-weight: normal !important;
   font-style: italic;
   color: var(--text-muted, #666);
-  margin-top: auto !important; /* Push to bottom */
+  margin-top: auto !important;
 }
 
 .select, .button {

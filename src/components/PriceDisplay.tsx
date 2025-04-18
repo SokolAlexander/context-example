@@ -3,12 +3,8 @@ import { useTotalPrice } from '../hooks/useTotalPrice';
 import RenderCounter from './RenderCounter';
 import styles from './PriceDisplay.module.css';
 
-/**
- * A component that only displays the price and demonstrates
- * the prevention of unnecessary re-renders using our specialized hook.
- */
+
 const PriceDisplay: React.FC = () => {
-  // Use the specialized useTotalPrice hook which only causes re-renders when price changes
   const totalPrice = useTotalPrice();
   
   return (

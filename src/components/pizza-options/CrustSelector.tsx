@@ -3,12 +3,7 @@ import { useCrust, useSetCrust, CRUST_TYPES } from '../../context/PizzaDeliveryC
 import RenderCounter from '../RenderCounter';
 import styles from './Selectors.module.css';
 
-/**
- * Component for selecting pizza crust
- * Only re-renders when the crust changes
- */
 const CrustSelector: React.FC = () => {
-  // Use the crust selector and setter hooks
   const crust = useCrust();
   const setCrust = useSetCrust();
 

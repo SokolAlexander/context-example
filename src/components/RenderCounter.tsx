@@ -14,14 +14,14 @@ const counterStyle: React.CSSProperties = {
   borderRadius: '3px',
   fontSize: '0.7em',
   fontWeight: 'bold',
-  zIndex: 10, // Ensure it's above other content
+  zIndex: 10, 
 };
 
 const RenderCounter: React.FC<RenderCounterProps> = ({ componentName }) => {
   const renderCount = useRef(0);
   renderCount.current += 1;
 
-  console.log(`${componentName} rendering... Count: ${renderCount.current}`); // Keep log for verification if needed
+  console.log(`${componentName} rendering... Count: ${renderCount.current}`); 
 
   return (
     <span style={counterStyle} title={`${componentName} Render Count`}>

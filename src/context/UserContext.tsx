@@ -1,6 +1,12 @@
-import React, { createContext, useState, useContext, ReactNode, useMemo, useCallback } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from "react";
 
-// --- Types ---
 interface UserContextState {
   customerName: string;
   setCustomerName: (name: string) => void;
@@ -8,44 +14,44 @@ interface UserContextState {
   setDeliveryAddress: (address: string) => void;
 }
 
-// --- Context Definition ---
 const UserContext = createContext<UserContextState | undefined>(undefined);
 
-// --- Provider Component ---
 interface UserProviderProps {
   children: ReactNode;
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [customerName, setCustomerNameState] = useState<string>('Pizza Lover');
-  const [deliveryAddress, setDeliveryAddressState] = useState<string>('');
+  const [customerName, setCustomerNameState] = useState<string>("Pizza Lover");
+  const [deliveryAddress, setDeliveryAddressState] = useState<string>("");
 
-  const setCustomerName = useCallback((name: string) => setCustomerNameState(name), []);
-  const setDeliveryAddress = useCallback((address: string) => setDeliveryAddressState(address), []);
+  const setCustomerName = useCallback(
+    (name: string) => setCustomerNameState(name),
+    []
+  );
+  const setDeliveryAddress = useCallback(
+    (address: string) => setDeliveryAddressState(address),
+    []
+  );
 
-  // Memoize context value
-  const contextValue = useMemo(() => ({
-    customerName,
-    setCustomerName,
-    deliveryAddress,
-    setDeliveryAddress,
-  }), [
-    customerName, setCustomerName,
-    deliveryAddress, setDeliveryAddress
-  ]);
+  const contextValue = useMemo(
+    () => ({
+      customerName,
+      setCustomerName,
+      deliveryAddress,
+      setDeliveryAddress,
+    }),
+    [customerName, setCustomerName, deliveryAddress, setDeliveryAddress]
+  );
 
   return (
-    <UserContext.Provider value={contextValue}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 };
 
-// --- Hook for consuming context ---
 export const useUserContext = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error('useUserContext must be used within a UserProvider');
+    throw new Error("useUserContext must be used within a UserProvider");
   }
   return context;
-}; 
+};

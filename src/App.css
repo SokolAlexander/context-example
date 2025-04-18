@@ -40,7 +40,6 @@ body {
   min-width: 320px;
   min-height: 100vh;
   transition: background-color 0.3s, color 0.3s;
-  /* Apply base background/color to body for consistency outside #root */
   background-color: var(--panel-bg-light);
   color: var(--text-light);
 }
@@ -64,7 +63,7 @@ body.dark-theme {
   flex-direction: column;
   min-height: 80vh;
   transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
-  position: relative; /* Ensure App itself can be a positioning context if needed */
+  position: relative;
 }
 
 .App h1 {
@@ -76,7 +75,6 @@ body.dark-theme {
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-/* Theme Styling for App container and H1 */
 .App.light {
   background-color: var(--panel-bg-light);
   color: var(--text-light);
@@ -97,7 +95,6 @@ body.dark-theme {
   border-color: var(--border-dark);
 }
 
-/* Base Layout */
 .layout {
   display: flex;
   flex-grow: 1;
@@ -112,14 +109,13 @@ body.dark-theme {
   gap: 1rem;
 }
 
-/* Base Component Styling (used by all components) */
 .component {
   padding: 1rem 1.5rem;
   border: 1px solid;
   border-radius: 8px;
   text-align: left;
   transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
-  position: relative; /* Needed for RenderCounter positioning */
+  position: relative;
 }
 
 .component h4 {
@@ -131,7 +127,6 @@ body.dark-theme {
   opacity: 0.8;
 }
 
-/* Theme Styling for base .component */
 .App.light .component {
   border-color: var(--border-light);
   background-color: var(--bg-light);
@@ -150,7 +145,6 @@ body.dark-theme {
   border-color: var(--border-dark);
 }
 
-/* Base Input and Button Styling */
 button, input, select {
   font-family: inherit;
   font-size: 0.95em;
@@ -172,13 +166,13 @@ label {
   opacity: 0.9;
 }
 
-input[type="color"] { /* Keep base style for color input */
+input[type="color"] {
   padding: 0.2em;
   height: 2.2em;
   vertical-align: middle;
 }
 
-.color-preview { /* Keep base style for color preview span */
+.color-preview {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -189,7 +183,6 @@ input[type="color"] { /* Keep base style for color input */
   box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
 }
 
-/* Theme-specific Base Inputs/Buttons/Previews */
 .App.light button, .App.light input, .App.light select {
   border-color: var(--border-light);
   background-color: var(--input-bg-light);
@@ -232,5 +225,3 @@ input[type="color"] { /* Keep base style for color input */
   border-color: var(--border-dark);
 }
 
-/* Removed specific component styles (.settings-panel, .toolbar, .status-bar, .canvas-display, .brush-preview etc.) */
-/* Removed unused default styles (.logo, .card etc.) */

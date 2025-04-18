@@ -9,11 +9,9 @@ import RenderCounter from "./RenderCounter";
 import styles from "./PizzaPreview.module.css";
 
 const PizzaPreview: React.FC = () => {
-  // Use individual selector hooks for more granular rendering control
   const size = useSize();
   const crust = useCrust();
   const toppings = useToppings();
-  // Use our new useTotalPrice hook
   const totalPrice = useTotalPrice();
 
   const toppingsList = toppings.join(", ") || "Plain";

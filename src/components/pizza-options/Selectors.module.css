@@ -7,7 +7,7 @@
   border: 1px solid var(--border-color, #ccc);
   display: flex;
   flex-direction: column;
-  min-height: 90px; /* Ensure consistent height for horizontal alignment */
+  min-height: 90px;
 }
 
 .selectorHeader {
@@ -15,7 +15,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  min-height: 24px; /* Ensure consistent height for the headers */
+  min-height: 24px;
 }
 
 .selectorLabel {
@@ -31,11 +31,10 @@
   border: 1px solid var(--border-color, #ccc);
   background-color: var(--input-bg, #fff);
   color: var(--text-color, inherit);
-  height: 38px; /* Ensure consistent height for selects */
-  appearance: auto; /* Native appearance works better with system dark mode */
+  height: 38px;
+  appearance: auto;
 }
 
-/* Style for dark theme specifically */
 :global(.dark-theme) .selector {
   background-color: rgba(30, 30, 30, 0.8);
   border-color: rgba(100, 100, 100, 0.5);

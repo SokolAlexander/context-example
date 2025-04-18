@@ -1,8 +1,11 @@
-import { useMemo } from 'react';
-import { useUserContext } from '../context/UserContext';
-import { useCrust, useSize, useToppings } from '../context/PizzaDeliveryContext';
+import { useMemo } from "react";
+import { useUserContext } from "../context/UserContext";
+import {
+  useCrust,
+  useSize,
+  useToppings,
+} from "../context/PizzaDeliveryContext";
 
-// Pricing constants (duplicated here to avoid circular dependency)
 const BASE_PRICE: Record<string, number> = {
   Small: 8,
   Medium: 10,
@@ -22,25 +25,22 @@ const ADDRESS_COMPLEXITY_FACTOR = 0.05;
  * A specialized hook for calculating the total price that pulls data from both
  * the PizzaDeliveryContext and UserContext. It will only trigger re-renders when
  * the price actually changes due to changes in size, crust, toppings, or delivery address.
- * 
+ *
  * @returns The calculated total price
  */
 export const useTotalPrice = (): number => {
-  // Get pizza details from PizzaDeliveryContext using individual selectors
   const size = useSize();
   const crust = useCrust();
   const toppings = useToppings();
-  
-  // Get delivery address from UserContext
+
   const { deliveryAddress } = useUserContext();
-  
-  // Calculate total price based on all dependencies
+
   return useMemo(() => {
     let price = BASE_PRICE[size] || 10;
     price += CRUST_PRICE[crust] || 0;
     price += toppings.length * PRICE_PER_TOPPING;
     price += (deliveryAddress?.length || 0) * ADDRESS_COMPLEXITY_FACTOR;
-    
+
     return parseFloat(price.toFixed(2));
   }, [size, crust, toppings, deliveryAddress]);
-}; 
+};
