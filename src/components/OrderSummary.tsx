@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { useUserContext } from '../context/UserContext.tsx';
-import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import { usePizzaPrice } from '../hooks/usePizzaPrice';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css';
