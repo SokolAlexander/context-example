@@ -1,37 +1,41 @@
 # React Context Performance Exercise: Pizza Builder
 
-This project is designed as an exercise to understand and address performance issues caused by overloaded React Contexts, using a Pizza Builder application theme.
+This project is designed as an exercise to understand and address performance issues caused by overloaded React Contexts, using a Pizza Builder application.
 
 ## The Problem
 
-The application simulates a simple Pizza Builder interface. It uses a single React Context (`PizzaBuilderContext` - although the file might still be named `StudioContext.tsx` initially) to manage all application state, including:
+The application simulates a simple Pizza Builder interface. It uses a single React Context (`PizzaBuilderContext`) to manage all application state, including:
 
-*   **User Info:** Customer Name, UI Theme (light/dark)
-*   **Pizza Configuration:** Crust Type, Pizza Size, Selected Toppings
-*   **Order Details:** Delivery Address, Order Timestamp, Calculated Total Price
+- **User Info:** Customer Name, UI Theme (light/dark)
+- **Pizza Configuration:** Crust Type, Pizza Size, Selected Toppings
+- **Order Details:** Delivery Address, Order Timestamp, Calculated Total Price
 
-Placing all this related and unrelated state into one context means that **any** change to **any** part of the context value (e.g., selecting a topping, changing the theme, typing an address) will cause **all** components consuming that context to re-render. This happens even if the component doesn't directly use the specific piece of state that changed (e.g., `PizzaOptions` re-rendering when the theme changes, or `CustomerDetails` re-rendering when a topping is added).
+Placing all this related and unrelated state into one context means that **any** change to **any** part of the context value (e.g., selecting a topping, changing the theme, typing an address) will cause **all** components consuming that context to re-render. This happens even if the component doesn't directly use the specific piece of state that changed (e.g., `PizzaOptions` re-rendering when the order creation timestamp changes, or `CustomerDetails` re-rendering when a topping is added).
 
-The calculated `totalPrice` also introduces coupling - changing the `deliveryAddress` or `toppings` affects the price, which might cause components only interested in the price (like `OrderSummary` or `PizzaPreview`) to re-render, but also potentially others if they consume the whole context.
+**Important Note:** This exercise is specifically focused on minimizing the number of component re-renders and optimizing render time. Other aspects of application performance (such as memory usage, network efficiency, or bundle size) are not the primary concern for this task. The goal is to ensure components only re-render when the specific data they depend on changes, not when unrelated state is updated.
 
-You can observe this by running the app (`npm run dev`), interacting with the controls (changing size, crust, toppings, theme, name, address), and watching the red Render Counter badges (`R: X`) in the top-right corner of each component block.
+## RenderCounter
+
+The `RenderCounter` component is a utility component used throughout the application to track and display the number of times a component rerenders. It's important to note that the presence of this component is purely for demonstration and debugging purposes - it does not affect or increase the number of rerenders in any way. It simply observes and displays the rerender count of its parent component.
 
 ## Your Task
 
-Your goal is to refactor the application to improve performance by separating the concerns within the context.
+Your goal is to refactor the application to improve performance by separating the concerns within the context, and ensure that components only re-render when the _relevant_ data they need actually changes.
 
-1.  **Analyze `src/context/StudioContext.tsx`:** Identify the distinct categories of state being managed.
-You should find at least three logical groups: User Info, Pizza Configuration, and Order/Price Details.
-2.  **Create Separate Contexts:** Create new context files (e.g., `UserInfoContext.tsx`, `PizzaConfigContext.tsx`, `OrderDetailsContext.tsx`) for each distinct domain.
-    *   Each new context should have its own state, types, provider component, and consumer hook (e.g., `useUserInfo`, `usePizzaConfig`).
-    *   Decide where the `totalPrice` calculation logic best fits. Should it be in `OrderDetailsContext`? Should it be calculated within components that need it? Does it warrant its own small context?
-3.  **Update the Main Provider:** Modify `src/context/StudioContext.tsx` (ideally rename it and its exports) or update `src/main.tsx`. The goal is to wrap the `App` component with the providers for *all* the new, separated contexts.
-4.  **Update Components:** Refactor the components (`App.tsx`, `PizzaOptions.tsx`, `OrderSummary.tsx`, `CustomerDetails.tsx`, `PizzaPreview.tsx`) to consume only the specific context(s) they need using the new hooks you created.
-5.  **Verify:** Run the application again. Interact with the controls and observe the Render Counters. Components should now only re-render (increment their counter) when the *relevant* data they subscribe to actually changes.
-    *   For example, changing the theme in `CustomerDetails` should ideally *only* re-render `CustomerDetails` and `App` (if `App` uses the theme), not `PizzaOptions` or `PizzaPreview`.
-    *   Adding a topping in `PizzaOptions` should ideally *only* re-render `PizzaOptions`, `PizzaPreview` (if it shows toppings/price), and `OrderSummary` (if it shows price), but not `CustomerDetails`.
+# note - this part below is not intended to be exposed, it's just for us to stay aligned
 
-**Bonus:** Can the price calculation be made more efficient or decoupled further? How would you handle dependencies between contexts if, for example, certain toppings were only available for certain sizes (though this isn't implemented here)?
+**Analyze `src/context/PizzaBuilderContext.tsx`:** Identify the distinct categories of state being managed.
+
+You should find at least three logical groups: User Info, Pizza Configuration, and Order/Price Details. 2. **Create Separate Contexts:** Create new context files (e.g., `UserInfoContext.tsx`, `PizzaConfigContext.tsx`, `OrderDetailsContext.tsx`) for each distinct domain.
+_ Each new context should have its own state, types, provider component, and consumer hook (e.g., `useUserInfo`, `usePizzaConfig`).
+_ Decide where the `totalPrice` calculation logic best fits. Should it be in `OrderDetailsContext`? Should it be calculated within components that need it? Does it warrant its own small context? 3. **Update the Main Provider:** Modify `src/context/StudioContext.tsx` (ideally rename it and its exports) or update `src/main.tsx`. The goal is to wrap the `App` component with the providers for _all_ the new, separated contexts. 4. **Update Components:** Refactor the components (`App.tsx`, `PizzaOptions.tsx`, `OrderSummary.tsx`, `CustomerDetails.tsx`, `PizzaPreview.tsx`) to consume only the specific context(s) they need using the new hooks you created. 5. **Verify:** Run the application again. Interact with the controls and observe the Render Counters. Components should now only re-render (increment their counter) when the _relevant_ data they subscribe to actually changes.
+
+- For example, changing the theme in `CustomerDetails` should ideally _only_ re-render `CustomerDetails` and `App` (if `App` uses the theme), not `PizzaOptions` or `PizzaPreview`.
+- Adding a topping in `PizzaOptions` should ideally _only_ re-render `PizzaOptions`, `PizzaPreview` (if it shows toppings/price), and `OrderSummary` (if it shows price), but not `CustomerDetails`.
+
+**Bonus:** Can the price calculation be made more efficient or decoupled further?
+
+**Bonus 2:** Can we make the component only rely on the PART of the context it needs without separating the contexts further (think of selectors in the libs like `zustand`)?
 
 ## Getting Started
 
@@ -48,6 +52,5 @@ You should find at least three logical groups: User Info, Pizza Configuration, a
     yarn dev
     ```
 3.  Open your browser to the URL provided (usually `http://localhost:5173`).
-4.  Open the developer console to observe the *detailed* render logs from the `RenderCounter` component if needed.
-5.  Observe the red `R: X` badges in the UI and interact with the controls to see the re-renders.
-6.  Start refactoring!
+4.  Check the red `R: X` badges in the UI and interact with the controls to see the re-renders.
+5.  Start refactoring!
