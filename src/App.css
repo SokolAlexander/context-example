@@ -131,7 +131,6 @@ body.dark-theme {
   opacity: 0.8;
 }
 
-/* Theme Styling for base .component */
 .App.light .component {
   border-color: var(--border-light);
   background-color: var(--bg-light);
@@ -150,7 +149,6 @@ body.dark-theme {
   border-color: var(--border-dark);
 }
 
-/* Base Input and Button Styling */
 button, input, select {
   font-family: inherit;
   font-size: 0.95em;
@@ -172,24 +170,6 @@ label {
   opacity: 0.9;
 }
 
-input[type="color"] { /* Keep base style for color input */
-  padding: 0.2em;
-  height: 2.2em;
-  vertical-align: middle;
-}
-
-.color-preview { /* Keep base style for color preview span */
-  display: inline-block;
-  width: 1.5em;
-  height: 1.5em;
-  border: 1px solid;
-  vertical-align: middle;
-  margin-left: 0.5em;
-  border-radius: 4px;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
-}
-
-/* Theme-specific Base Inputs/Buttons/Previews */
 .App.light button, .App.light input, .App.light select {
   border-color: var(--border-light);
   background-color: var(--input-bg-light);
@@ -206,9 +186,6 @@ input[type="color"] { /* Keep base style for color input */
   outline: none;
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
-.App.light .color-preview {
-  border-color: var(--border-light);
 }
 
 .App.dark button, .App.dark input, .App.dark select {
@@ -228,9 +205,4 @@ input[type="color"] { /* Keep base style for color input */
   border-color: #adb5bd;
   box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);
 }
-.App.dark .color-preview {
-  border-color: var(--border-dark);
-}
 
-/* Removed specific component styles (.settings-panel, .toolbar, .status-bar, .canvas-display, .brush-preview etc.) */
-/* Removed unused default styles (.logo, .card etc.) */

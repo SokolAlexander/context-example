@@ -1,7 +1,7 @@
 import React from "react";
 import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
 import RenderCounter from "./RenderCounter";
-import styles from "./PizzaPreview.module.css"; // Import CSS Module
+import styles from "./PizzaPreview.module.css";
 
 const PizzaPreview: React.FC = () => {
   const { size, crust, toppings, totalPrice } = usePizzaDeliveryContext();

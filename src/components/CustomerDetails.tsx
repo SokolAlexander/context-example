@@ -1,13 +1,23 @@
-import React from 'react';
-import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
-import RenderCounter from './RenderCounter';
-import styles from './CustomerDetails.module.css'; // Import CSS Module
+import React from "react";
+import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
+import RenderCounter from "./RenderCounter";
+import styles from "./CustomerDetails.module.css";
 
 const CustomerDetails: React.FC = () => {
-  const { theme, setTheme, customerName, setCustomerName, deliveryAddress, setDeliveryAddress } = usePizzaDeliveryContext();
+  const {
+    theme,
+    setTheme,
+    customerName,
+    setCustomerName,
+    deliveryAddress,
+    setDeliveryAddress,
+  } = usePizzaDeliveryContext();
 
   return (
-    <div className={`component ${styles.customerDetails}`} style={{ position: 'relative' }}>
+    <div
+      className={`component ${styles.customerDetails}`}
+      style={{ position: "relative" }}
+    >
       <RenderCounter componentName="CustomerDetails" />
       <h4>Customer Details</h4>
       <div className={styles.detailGroup}>
@@ -31,14 +41,19 @@ const CustomerDetails: React.FC = () => {
       </div>
       <div className={styles.detailGroup}>
         <label htmlFor="theme">Theme:</label>
-        <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}>
+        <select
+          id="theme"
+          value={theme}
+          onChange={(e) =>
+            setTheme(e.target.value === "dark" ? "dark" : "light")
+          }
+        >
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
       </div>
-      {/* Note about price entanglement removed as it's part of the exercise description elsewhere */}
     </div>
   );
 };
 
-export default CustomerDetails; 
+export default CustomerDetails;

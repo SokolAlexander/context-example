@@ -1,7 +1,7 @@
 import React from 'react';
 import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
-import styles from './OrderSummary.module.css'; // Import CSS Module
+import styles from './OrderSummary.module.css';
 
 const OrderSummary: React.FC = () => {
   const { customerName, totalPrice, orderTime, deliveryAddress, placeOrder } = usePizzaDeliveryContext();
