@@ -152,3 +152,78 @@ C. Get rid of the React context and store the state in a plain object. Still use
 D. Support splitting the state into multiple stores, decentralize the state management and allow atomic updates - this is more like a Jorai.
 
 Anyway, we're not gonna reimplement the state management system oursleves (that way madness lies). But now that we know a bit more about the approaches, we can make a more informed decision when choosing the most appropriate library for the job.
+
+## The Struggles of DIY State Management
+
+Our implementation demonstrates many of the challenges that led to the creation of state management libraries in the first place. Here are the key issues we've encountered:
+
+### 1. Global State Outside of React
+
+Our implementation uses global variables to store state and subscriptions outside of React's ecosystem:
+
+```javascript
+// Global state outside of React's control
+let currentState = { /* initial state */ };
+let subscriptions = [];
+```
+
+This approach has several problems:
+- It violates React's principles of state isolation and predictability
+- Global state is harder to debug and can lead to unexpected behavior
+- It doesn't play well with React's development tools or error handling
+- Multiple instances of the application would share state unexpectedly
+
+### 2. Inefficient and Buggy Subscriptions
+
+Our naive subscription system has several issues:
+
+- It doesn't properly track which parts of the state each component is using
+- All subscribers are notified on every state change, even for unrelated updates
+- The dependency array in our effects can easily become stale
+- Equality checks are simplistic and don't handle complex data structures
+
+### 3. No Protection Against Race Conditions
+
+Our implementation doesn't handle concurrent updates properly:
+
+- No transaction mechanism for batching multiple updates
+- Potential race conditions when multiple components update state simultaneously
+- No middleware system to handle async logic or side effects
+
+### 4. Debugging Nightmare
+
+With our DIY approach:
+
+- There's no way to track what changed the state or why
+- No time-travel debugging or state snapshots
+- No standardized error handling
+- No developer tools for inspecting the state tree
+
+### 5. Memory Leaks and Performance Issues
+
+Our subscription management is prone to:
+
+- Memory leaks if unsubscribe functions aren't properly called
+- Excessive re-renders due to naive dependency tracking
+- Potential infinite loops or cyclical updates
+
+### 6. Scaling Problems
+
+As the application grows:
+
+- This pattern becomes increasingly difficult to maintain
+- Component reusability suffers due to tight coupling with our custom system
+- Testing becomes more difficult without proper state isolation
+
+### Why Use Established Libraries?
+
+After experiencing these challenges firsthand, it's clear why libraries like Redux, Zustand, Jotai, Recoil, and MobX exist. They have:
+
+1. **Solved these problems**: Years of development focused on these exact challenges
+2. **Developer tools**: Time-travel debugging, state inspection, and error tracing
+3. **Community support**: Extensions, middleware, and patterns for common use cases
+4. **Performance optimizations**: Sophisticated equality checks and render optimization
+5. **Ecosystem integration**: Works with React DevTools and other libraries
+6. **Testing utilities**: Simplified testing strategies for state management
+
+Sometimes it's valuable to try building your own solution to understand the problems deeply, but for production applications, established libraries provide battle-tested solutions to these complex problems.
