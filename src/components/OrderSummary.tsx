@@ -1,11 +1,26 @@
 import React, { useState } from 'react';
-import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
+import { useSize, useToppings } from '../context/PizzaDeliveryContext';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css';
 
+const BASE_PRICE: Record<string, number> = {
+  Small: 8,
+  Medium: 10,
+  Large: 12,
+  XLarge: 14,
+};
+const PRICE_PER_TOPPING = 1.5;
+
 const OrderSummary: React.FC = () => {
-  const { totalPrice } = usePizzaDeliveryContext();
+  const size = useSize();
+  const toppings = useToppings();
   const [customerName, setCustomerName] = useState<string>("");
+
+  const totalPrice = (() => {
+    let price = BASE_PRICE[size] || 10;
+    price += toppings.length * PRICE_PER_TOPPING;
+    return parseFloat(price.toFixed(2));
+  })();
 
   return (
     <div className={`component ${styles.orderSummary}`} style={{ position: 'relative' }}>

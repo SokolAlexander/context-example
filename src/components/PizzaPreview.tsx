@@ -1,10 +1,26 @@
 import React from "react";
-import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
+import { useCrust, useSize, useToppings } from "../context/PizzaDeliveryContext";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaPreview.module.css";
 
+const BASE_PRICE: Record<string, number> = {
+  Small: 8,
+  Medium: 10,
+  Large: 12,
+  XLarge: 14,
+};
+const PRICE_PER_TOPPING = 1.5;
+
 const PizzaPreview: React.FC = () => {
-  const { size, crust, toppings, totalPrice } = usePizzaDeliveryContext();
+  const size = useSize();
+  const crust = useCrust();
+  const toppings = useToppings();
+
+  const totalPrice = (() => {
+    let price = BASE_PRICE[size] || 10;
+    price += toppings.length * PRICE_PER_TOPPING;
+    return parseFloat(price.toFixed(2));
+  })();
 
   const toppingsList = toppings.join(", ") || "Plain";
 

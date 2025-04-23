@@ -1,15 +1,21 @@
 import React from "react";
 import {
-  usePizzaDeliveryContext,
   TOPPINGS_LIST,
   CRUST_TYPES,
   SIZES,
-} from "../context/PizzaDeliveryContext.tsx";
+  useCrust,
+  useSize,
+  useToppings,
+  useSetCrust,
+  useSetSize,
+  useToggleTopping,
+} from "../context/PizzaDeliveryContext";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaOptions.module.css";
 
 function SizeSelector() {
-  const { size, setSize } = usePizzaDeliveryContext();
+  const size = useSize();
+  const setSize = useSetSize();
 
   return (
     <div className={`component ${styles.optionCard}`}>
@@ -27,7 +33,8 @@ function SizeSelector() {
 }
 
 function CrustSelector() {
-  const { crust, setCrust } = usePizzaDeliveryContext();
+  const crust = useCrust();
+  const setCrust = useSetCrust();
 
   return (
     <div className={`component ${styles.optionCard}`}>
@@ -45,7 +52,8 @@ function CrustSelector() {
 }
 
 function ToppingsSelector() {
-  const { toppings, toggleTopping } = usePizzaDeliveryContext();
+  const toppings = useToppings();
+  const toggleTopping = useToggleTopping();
 
   return (
     <div className={`component ${styles.optionCard}`}>
