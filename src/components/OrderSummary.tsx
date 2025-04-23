@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext.tsx';
 import RenderCounter from './RenderCounter';
 import styles from './OrderSummary.module.css';
 
 const OrderSummary: React.FC = () => {
-  const { totalPrice, customerName, setCustomerName } = usePizzaDeliveryContext();
+  const { totalPrice } = usePizzaDeliveryContext();
+  const [customerName, setCustomerName] = useState<string>("");
 
   return (
     <div className={`component ${styles.orderSummary}`} style={{ position: 'relative' }}>

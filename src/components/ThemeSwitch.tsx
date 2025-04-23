@@ -1,8 +1,8 @@
 import React from 'react';
-import { usePizzaDeliveryContext } from '../context/PizzaDeliveryContext';
+import { useThemeContext } from '../context/ThemeContext';
 
 export const ThemeSwitch: React.FC = () => {
-  const { theme, toggleTheme } = usePizzaDeliveryContext();
+  const { theme, toggleTheme } = useThemeContext();
 
   return (
     <button

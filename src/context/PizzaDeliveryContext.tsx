@@ -22,20 +22,15 @@ const PRICE_PER_TOPPING = 1.5;
 type Crust = (typeof CRUST_TYPES)[number];
 type Size = (typeof SIZES)[number];
 type Topping = (typeof TOPPINGS_LIST)[number];
-type Theme = "light" | "dark";
 
 interface PizzaDeliveryContextState {
   crust: Crust;
   size: Size;
   toppings: Topping[];
   totalPrice: number;
-  theme: Theme;
-  customerName: string;
   setCrust: (crust: Crust) => void;
   setSize: (size: Size) => void;
   toggleTopping: (topping: Topping) => void;
-  toggleTheme: () => void;
-  setCustomerName: (name: string) => void;
 }
 
 const PizzaDeliveryContext = createContext<
@@ -52,8 +47,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
   const [crust, setCrustState] = useState<Crust>(CRUST_TYPES[0]);
   const [size, setSizeState] = useState<Size>(SIZES[1]);
   const [toppings, setToppingsState] = useState<Topping[]>([TOPPINGS_LIST[0]]);
-  const [theme, setTheme] = useState<Theme>("light");
-  const [customerName, setCustomerNameState] = useState<string>("");
 
   const setCrust = useCallback(
     (newCrust: Crust) => setCrustState(newCrust),
@@ -66,12 +59,6 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
         ? prev.filter((t) => t !== topping)
         : [...prev, topping]
     );
-  }, []);
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  }, []);
-  const setCustomerName = useCallback((name: string) => {
-    setCustomerNameState(name);
   }, []);
 
   const totalPrice = useMemo(() => {
@@ -86,26 +73,18 @@ export const PizzaDeliveryProvider: React.FC<PizzaDeliveryProviderProps> = ({
       size,
       toppings,
       totalPrice,
-      theme,
-      customerName,
       setCrust,
       setSize,
       toggleTopping,
-      toggleTheme,
-      setCustomerName,
     }),
     [
       crust,
       size,
       toppings,
       totalPrice,
-      theme,
-      customerName,
       setCrust,
       setSize,
       toggleTopping,
-      toggleTheme,
-      setCustomerName,
     ]
   );
 
