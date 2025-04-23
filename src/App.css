@@ -76,6 +76,15 @@ body.dark-theme {
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
 /* Theme Styling for App container and H1 */
 .App.light {
   background-color: var(--panel-bg-light);
@@ -93,6 +102,16 @@ body.dark-theme {
   box-shadow: 0 4px 12px var(--shadow-dark);
 }
 .App.dark h1 {
+  background-color: var(--bg-dark);
+  border-color: var(--border-dark);
+}
+
+.App.light .header {
+  background-color: var(--bg-light);
+  border-color: var(--border-light);
+}
+
+.App.dark .header {
   background-color: var(--bg-dark);
   border-color: var(--border-dark);
 }
