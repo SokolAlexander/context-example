@@ -7,13 +7,26 @@ import RenderCounter from './components/RenderCounter'
 import { ThemeSwitch } from './components/ThemeSwitch'
 
 function App() {
-  const { theme } = usePizzaDeliveryContext();
+  const { theme, customerName, setCustomerName } = usePizzaDeliveryContext();
 
   return (
     <div className={`App ${theme}`} style={{ position: 'relative' }}>
       <RenderCounter componentName="App" />
       <div className="header">
-        <h1>Pizza Builder</h1>
+        <div className="header-left">
+          <h1>Pizza Builder</h1>
+          <div className="customer-name-wrapper">
+            <label htmlFor="customerName">Customer Name:</label>
+            <input
+              id="customerName"
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              placeholder="Enter your name"
+              className="customer-name-input"
+            />
+          </div>
+        </div>
         <ThemeSwitch />
       </div>
       <div className="layout">
