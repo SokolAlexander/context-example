@@ -2,6 +2,7 @@ import React from "react";
 import RenderCounter from "./RenderCounter";
 import styles from "./OrderSummary.module.css";
 import { useSize, useToppings } from "../context/PizzaDeliveryContext.tsx";
+import { useCustomerContext } from "../context/CustomerContext.tsx";
 
 const BASE_PRICE: Record<string, number> = {
   Small: 8,
@@ -14,7 +15,8 @@ const PRICE_PER_TOPPING = 1.5;
 const OrderSummary: React.FC = () => {
   const size = useSize();
   const toppings = useToppings();
-  const { customerName } = usePizzaDeliveryContext();
+
+  const { customerName } = useCustomerContext();
 
   const totalPrice = (() => {
     let price = BASE_PRICE[size] || 10;
