@@ -34,7 +34,7 @@ function SizeSelector() {
   );
 }
 
-function CrustSelector() {
+const CrustSelector = memo(() => {
   const crust = useCrust();
   const setCrust = useSetCrust();
 
@@ -51,7 +51,7 @@ function CrustSelector() {
       </select>
     </div>
   );
-};
+});
 
 function ToppingsSelector() {
   const toppings = useToppings();
