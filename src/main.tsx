@@ -3,11 +3,14 @@ import App from './App.tsx'
 import './index.css'
 import { PizzaDeliveryProvider } from './context/PizzaDeliveryContext.tsx'
 import { ThemeProvider } from './context/ThemeContext'
+import { CustomerProvider } from './context/CustomerContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
-        <PizzaDeliveryProvider>
-            <App />
-        </PizzaDeliveryProvider>
+        <CustomerProvider>
+            <PizzaDeliveryProvider>
+                <App />
+            </PizzaDeliveryProvider>
+        </CustomerProvider>
     </ThemeProvider>
 )
