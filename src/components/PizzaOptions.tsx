@@ -1,9 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   usePizzaDeliveryContext,
   TOPPINGS_LIST,
   CRUST_TYPES,
   SIZES,
+  Crust,
+  Size,
 } from "../context/PizzaDeliveryContext.tsx";
 import RenderCounter from "./RenderCounter";
 import styles from "./PizzaOptions.module.css";
@@ -15,7 +17,7 @@ function SizeSelector() {
     <div className={`component ${styles.optionCard}`}>
       <RenderCounter componentName="Size" />
       <h3>Size:</h3>
-      <select value={size} onChange={(e) => setSize(e.target.value)}>
+      <select value={size} onChange={(e) => setSize(e.target.value as Size)}>
         {SIZES.map((s) => (
           <option key={s} value={s}>
             {s}
@@ -26,14 +28,14 @@ function SizeSelector() {
   );
 }
 
-function CrustSelector() {
+const CrustSelector = memo(() => {
   const { crust, setCrust } = usePizzaDeliveryContext();
 
   return (
     <div className={`component ${styles.optionCard}`}>
       <RenderCounter componentName="Crust" />
       <h3>Crust:</h3>
-      <select value={crust} onChange={(e) => setCrust(e.target.value)}>
+      <select value={crust} onChange={(e) => setCrust(e.target.value as Crust)}>
         {CRUST_TYPES.map((c) => (
           <option key={c} value={c}>
             {c}
@@ -42,7 +44,7 @@ function CrustSelector() {
       </select>
     </div>
   );
-}
+});
 
 function ToppingsSelector() {
   const { toppings, toggleTopping } = usePizzaDeliveryContext();
