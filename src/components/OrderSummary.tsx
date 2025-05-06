@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useSize, useToppings } from '../context/PizzaDeliveryContext';
-import RenderCounter from './RenderCounter';
-import styles from './OrderSummary.module.css';
+import React from "react";
+import RenderCounter from "./RenderCounter";
+import styles from "./OrderSummary.module.css";
+import { useSize, useToppings } from "../context/PizzaDeliveryContext.tsx";
 
 const BASE_PRICE: Record<string, number> = {
   Small: 8,
@@ -14,7 +14,7 @@ const PRICE_PER_TOPPING = 1.5;
 const OrderSummary: React.FC = () => {
   const size = useSize();
   const toppings = useToppings();
-  const [customerName, setCustomerName] = useState<string>("");
+  const { customerName } = usePizzaDeliveryContext();
 
   const totalPrice = (() => {
     let price = BASE_PRICE[size] || 10;
@@ -23,29 +23,24 @@ const OrderSummary: React.FC = () => {
   })();
 
   return (
-    <div className={`component ${styles.orderSummary}`} style={{ position: 'relative' }}>
+    <div
+      className={`component ${styles.orderSummary}`}
+      style={{ position: "relative" }}
+    >
       <RenderCounter componentName="OrderSummary" />
       <h4>Order Summary</h4>
-      <div className={styles.summaryItem}>
-        <label htmlFor="customerName">Customer Name:</label>
-        <input
-          id="customerName"
-          type="text"
-          value={customerName}
-          onChange={(e) => setCustomerName(e.target.value)}
-          placeholder="Enter your name"
-        />
-      </div>
       {customerName && (
         <div className={styles.summaryItem}>
           <strong>Order for: {customerName}</strong>
         </div>
       )}
       <div className={styles.summaryItem}>
-        <strong className={styles.totalPrice}>Total Price: ${totalPrice.toFixed(2)}</strong>
+        <strong className={styles.totalPrice}>
+          Total Price: ${totalPrice.toFixed(2)}
+        </strong>
       </div>
     </div>
   );
 };
 
-export default OrderSummary; 
+export default OrderSummary;

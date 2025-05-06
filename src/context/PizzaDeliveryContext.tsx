@@ -10,9 +10,10 @@ export const TOPPINGS_LIST = ["Pepperoni", "Mushrooms", "Onions", "Sausage"];
 export const CRUST_TYPES = ["Regular", "Thin", "Stuffed", "Cauliflower"];
 export const SIZES = ["Small", "Medium", "Large", "XLarge"];
 
-type Crust = (typeof CRUST_TYPES)[number];
-type Size = (typeof SIZES)[number];
+export type Crust = (typeof CRUST_TYPES)[number];
+export type Size = (typeof SIZES)[number];
 type Topping = (typeof TOPPINGS_LIST)[number];
+type Theme = "light" | "dark";
 
 interface PizzaDeliveryState {
   crust: Crust;

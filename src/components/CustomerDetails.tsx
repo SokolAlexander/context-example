@@ -5,12 +5,8 @@ import styles from "./CustomerDetails.module.css";
 
 const CustomerDetails: React.FC = () => {
   const {
-    theme,
-    setTheme,
     customerName,
     setCustomerName,
-    deliveryAddress,
-    setDeliveryAddress,
   } = usePizzaDeliveryContext();
 
   return (
@@ -19,38 +15,16 @@ const CustomerDetails: React.FC = () => {
       style={{ position: "relative" }}
     >
       <RenderCounter componentName="CustomerDetails" />
-      <h4>Customer Details</h4>
-      <div className={styles.detailGroup}>
-        <label htmlFor="customerName">Name:</label>
+      <div className={styles.nameWrapper}>
+        <label htmlFor="customerName">Customer Name:</label>
         <input
-          type="text"
           id="customerName"
+          type="text"
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
+          placeholder="Enter your name"
+          className={styles.nameInput}
         />
-      </div>
-      <div className={styles.detailGroup}>
-        <label htmlFor="deliveryAddress">Delivery Address:</label>
-        <input
-          type="text"
-          id="deliveryAddress"
-          value={deliveryAddress}
-          onChange={(e) => setDeliveryAddress(e.target.value)}
-          placeholder="Enter delivery address"
-        />
-      </div>
-      <div className={styles.detailGroup}>
-        <label htmlFor="theme">Theme:</label>
-        <select
-          id="theme"
-          value={theme}
-          onChange={(e) =>
-            setTheme(e.target.value === "dark" ? "dark" : "light")
-          }
-        >
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
       </div>
     </div>
   );

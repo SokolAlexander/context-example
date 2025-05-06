@@ -79,10 +79,22 @@ body.dark-theme {
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header-left h1 {
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
 /* Theme Styling for App container and H1 */
