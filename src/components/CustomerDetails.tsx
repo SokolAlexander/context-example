@@ -1,10 +1,11 @@
 import React from "react";
-import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext.tsx";
+import { usePizzaDeliveryContext } from "../context/PizzaDeliveryContext";
 import RenderCounter from "./RenderCounter";
 import styles from "./CustomerDetails.module.css";
 
 const CustomerDetails: React.FC = () => {
-  const { theme, toggleTheme } = usePizzaDeliveryContext();
+  const { theme, toggleTheme, customerName, setCustomerName } =
+    usePizzaDeliveryContext();
 
   return (
     <div
@@ -12,19 +13,16 @@ const CustomerDetails: React.FC = () => {
       style={{ position: "relative" }}
     >
       <RenderCounter componentName="CustomerDetails" />
-      <h4>Customer Details</h4>
-      <div className={styles.detailGroup}>
-        <label htmlFor="theme">Theme:</label>
-        <select
-          id="theme"
-          value={theme}
-          onChange={(e) =>
-            toggleTheme()
-          }
-        >
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
+      <div className={styles.nameWrapper}>
+        <label htmlFor="customerName">Customer Name:</label>
+        <input
+          id="customerName"
+          type="text"
+          value={customerName}
+          onChange={(e) => setCustomerName(e.target.value)}
+          placeholder="Enter your name"
+          className={styles.nameInput}
+        />
       </div>
     </div>
   );

@@ -1,14 +1,48 @@
-.detailGroup {
+.customerDetails {
   margin-bottom: 1rem;
 }
 
-.detailGroup label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: 500;
+.nameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.detailGroup select {
-  width: calc(100% - 1.6em);
-  box-sizing: border-box;
+.nameWrapper label {
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nameInput {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 300px;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+:global(.App.light) .nameInput {
+  border-color: var(--border-light);
+  background-color: var(--input-bg-light);
+  color: var(--text-light);
+}
+
+:global(.App.dark) .nameInput {
+  border-color: var(--border-dark);
+  background-color: var(--input-bg-dark);
+  color: var(--text-dark);
+}
+
+.nameInput:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+:global(.App.dark) .nameInput:focus {
+  border-color: #adb5bd;
+  box-shadow: 0 0 0 0.2rem rgba(108,117,125,.5);
 }

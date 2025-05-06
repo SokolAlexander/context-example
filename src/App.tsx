@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css'
 import { usePizzaDeliveryContext } from './context/PizzaDeliveryContext.tsx'
 import PizzaOptions from './components/PizzaOptions'
@@ -5,9 +6,10 @@ import OrderSummary from './components/OrderSummary'
 import PizzaPreview from './components/PizzaPreview'
 import RenderCounter from './components/RenderCounter'
 import { ThemeSwitch } from './components/ThemeSwitch'
+import CustomerDetails from './components/CustomerDetails'
 
 function App() {
-  const { theme, customerName, setCustomerName } = usePizzaDeliveryContext();
+  const { theme } = usePizzaDeliveryContext();
 
   return (
     <div className={`App ${theme}`} style={{ position: 'relative' }}>
@@ -15,17 +17,8 @@ function App() {
       <div className="header">
         <div className="header-left">
           <h1>Pizza Builder</h1>
-          <div className="customer-name-wrapper">
-            <label htmlFor="customerName">Customer Name:</label>
-            <input
-              id="customerName"
-              type="text"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="Enter your name"
-              className="customer-name-input"
-            />
-          </div>
+          <CustomerDetails />
+
         </div>
         <ThemeSwitch />
       </div>
